@@ -1,0 +1,15 @@
+{
+	"type": "forge:ore_shaped",
+	"pattern": [
+		"a ",
+		" a"
+	],
+	"key": {
+		"a": {
+			"item": "sct:stone_crafting_plate"
+		}
+	},
+	"result": {
+		"item": "sct:stone_crafting_table"
+	}
+}
