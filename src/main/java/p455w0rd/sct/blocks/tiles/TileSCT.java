@@ -12,6 +12,10 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import p455w0rd.sct.inventory.InventoryWorkbench;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author p455w0rd
@@ -22,6 +26,21 @@ public class TileSCT extends TileEntity implements IInventory {
 	private final String NBT_MATRIX_LIST = "MatrixInv";
 	private final String NBT_SLOT_ID = "Slot";
 	private final NonNullList<ItemStack> invList = NonNullList.withSize(9, ItemStack.EMPTY);
+	private Set<InventoryWorkbench> invs = new HashSet<>();
+
+	public void onOpen(InventoryWorkbench inv) {
+		this.invs.add(inv);
+	}
+
+	public void onClose(InventoryWorkbench inv) {
+		this.invs.remove(inv);
+	}
+
+	public void updateInvs() {
+		for(InventoryWorkbench inv : this.invs) {
+				inv.changed();
+		}
+	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
@@ -52,6 +71,7 @@ public class TileSCT extends TileEntity implements IInventory {
 				}
 			}
 		}
+		updateInvs();
 	}
 
 	@Override
@@ -124,7 +144,7 @@ public class TileSCT extends TileEntity implements IInventory {
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		return true;
+		return getWorld().getTileEntity(getPos()) == this && player.getDistanceSq(getPos().getX() + .5, getPos().getY() + .5, getPos().getZ() + .5) <= 64;
 	}
 
 	@Override
