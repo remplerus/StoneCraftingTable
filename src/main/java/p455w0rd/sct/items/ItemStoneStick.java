@@ -1,12 +1,12 @@
 package p455w0rd.sct.items;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import p455w0rd.sct.init.ModGlobals;
+import p455w0rd.sct.init.ModItemGroup;
 
 /**
  * @author p455w0rd
@@ -15,16 +15,17 @@ import p455w0rd.sct.init.ModGlobals;
 public class ItemStoneStick extends Item {
 
 	private static final String NAME = "stone_stick";
+	private static final Properties PROPS = new Item.Properties().group(ModItemGroup.getInstance()).maxStackSize(64);
 
 	public ItemStoneStick() {
-		setCreativeTab(CreativeTabs.DECORATIONS);
-		setUnlocalizedName(NAME);
+		super(PROPS);
 		setRegistryName(ModGlobals.MODID + ":" + NAME);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void registerModel() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+	@OnlyIn(Dist.CLIENT)
+	public void registerModel(ItemModelMesher mesher) {
+		mesher.register(this, new ModelResourceLocation(getRegistryName(), "inventory"));
+		//ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 
 }

@@ -1,25 +1,24 @@
 package p455w0rd.sct.inventory;
 
-import p455w0rd.sct.blocks.tiles.TileSCT;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import p455w0rd.sct.blocks.tiles.TileSCT;
 
 /**
  * @author Lothrazar via https://github.com/PrinceOfAmber/Cyclic/blob/develop/src/main/java/com/lothrazar/cyclicmagic/block/workbench/InventoryWorkbench.java
  *
  */
-public class InventoryWorkbench extends InventoryCrafting {
+public class InventoryWorkbench extends CraftingInventory {
 
-	private TileSCT tileEntity;
-	private Container container;
+	private final TileSCT tile;
+	private final Container container;
 
-	public InventoryWorkbench(Container eventHandlerIn, TileSCT tileEntity) {
+	public InventoryWorkbench(final Container eventHandlerIn, final TileSCT tileEntity) {
 		super(eventHandlerIn, 3, 3);
-		this.tileEntity = tileEntity;
+		tile = tileEntity;
 		container = eventHandlerIn;
 	}
 
@@ -29,47 +28,49 @@ public class InventoryWorkbench extends InventoryCrafting {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
-		return tileEntity.getStackInSlot(index);
-	}
-
-	@Override
-	public void markDirty() {
-			tileEntity.markDirty();
-			IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
-			tileEntity.getWorld().notifyBlockUpdate(tileEntity.getPos(), state, state, 3);
-	}
-
-	@Override
-	public void openInventory(EntityPlayer player) {
-			super.openInventory(player);
-			tileEntity.onOpen(this);
-	}
-
-	@Override
-	public void closeInventory(EntityPlayer player) {
-			super.closeInventory(player);
-			tileEntity.onClose(this);
-	}
-
-	public void changed() {
-			container.onCraftMatrixChanged(this);
+	public ItemStack getStackInSlot(final int index) {
+		return tile.getStackInSlot(index);
 	}
 
 	/**
 	 * just like vanilla
 	 */
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		ItemStack is = tileEntity.decrStackSize(index, count);
-		if (is != ItemStack.EMPTY)
-			tileEntity.updateInvs();
-		return is;
+	public ItemStack decrStackSize(final int index, final int count) {
+		final ItemStack stack = tile.decrStackSize(index, count);
+		if (stack != ItemStack.EMPTY) {
+			tile.updateInvs();
+		}
+		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
-		tileEntity.setInventorySlotContents(index, stack);
-		tileEntity.updateInvs();
+	public void setInventorySlotContents(final int index, final ItemStack stack) {
+		tile.setInventorySlotContents(index, stack);
+		//container.onCraftMatrixChanged(this);
+		tile.updateInvs();
+	}
+
+	@Override
+	public void markDirty() {
+		tile.markDirty();
+		final BlockState state = tile.getWorld().getBlockState(tile.getPos());
+		tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
+	}
+
+	@Override
+	public void openInventory(final PlayerEntity player) {
+		super.openInventory(player);
+		tile.onOpen(this);
+	}
+
+	@Override
+	public void closeInventory(final PlayerEntity player) {
+		super.closeInventory(player);
+		tile.onClose(this);
+	}
+
+	public void changed() {
+		container.onCraftMatrixChanged(this);
 	}
 }

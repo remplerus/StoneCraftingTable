@@ -2,28 +2,24 @@ package p455w0rd.sct.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.StatList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import p455w0rd.sct.StoneCraftingTable;
 import p455w0rd.sct.blocks.tiles.TileSCT;
 import p455w0rd.sct.init.ModGlobals;
+import p455w0rd.sct.init.ModGuiHandler.GUI;
 
 /**
  * @author p455w0rd
@@ -31,54 +27,51 @@ import p455w0rd.sct.init.ModGlobals;
  */
 public class BlockSCT extends Block implements ITileEntityProvider {
 
-	protected static final String NAME = "stone_crafting_table";
+	protected static final ResourceLocation REG_NAME = new ResourceLocation(ModGlobals.MODID, "stone_crafting_table");
 
 	public BlockSCT() {
-		super(Material.ROCK);
-		setCreativeTab(CreativeTabs.DECORATIONS);
-		setUnlocalizedName(NAME);
-		setRegistryName(ModGlobals.MODID + ":" + NAME);
-		setHarvestLevel("pickaxe", 1);
-		setHardness(5.0F);
+		super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
+		//setCreativeTab(CreativeTabs.DECORATIONS);
+		//setUnlocalizedName(NAME);
+		setRegistryName(REG_NAME);
+		//setHarvestLevel("pickaxe", 1);
+		//setHardness(5.0F);
+	}
+
+	public static ResourceLocation getRegName() {
+		return REG_NAME;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (world.isRemote) {
-			return true;
+	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rtr) {
+		//boolean ret = world.isRemote ? ModGuiHandler.openGuiClient(GUI.STONE_CRAFTING_TABLE, player, pos) : ModGuiHandler.openGuiServer(GUI.STONE_CRAFTING_TABLE, player, pos);
+		final boolean ret = StoneCraftingTable.getProxy().openGui(GUI.STONE_CRAFTING_TABLE, player, pos);
+		if (!world.isRemote && ret) {
+			player.addStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
 		}
-		else {
-			player.openGui(StoneCraftingTable.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
-			player.addStat(StatList.CRAFTING_TABLE_INTERACTION);
-			return true;
-		}
+		return ret;
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
-		player.addStat(StatList.getBlockStats(this));
+	public void harvestBlock(final World world, final PlayerEntity player, final BlockPos pos, final BlockState state, @Nullable final TileEntity te, @Nullable ItemStack stack) {
+		player.addStat(Stats.BLOCK_MINED.get(this));
 		player.addExhaustion(0.025F);
 		stack = getItemBlockWithNBT(te);
 		spawnAsEntity(world, pos, stack);
 	}
 
-	private ItemStack getItemBlockWithNBT(TileEntity te) {
-		ItemStack stack = getSilkTouchDrop(te.getWorld().getBlockState(te.getPos()));
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
+	private ItemStack getItemBlockWithNBT(final TileEntity te) {
+		final ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+		final CompoundNBT nbttagcompound = new CompoundNBT();
 		if (te != null && te instanceof TileSCT && !((TileSCT) te).isEmpty()) {
-			te.writeToNBT(nbttagcompound);
+			te.write(nbttagcompound);
 			stack.setTagInfo("BlockEntityTag", nbttagcompound);
 		}
 		return stack;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void registerModel() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-	}
-
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createNewTileEntity(final IBlockReader worldIn) {
 		return new TileSCT();
 	}
 

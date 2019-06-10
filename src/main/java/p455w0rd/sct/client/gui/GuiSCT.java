@@ -1,46 +1,51 @@
 package p455w0rd.sct.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import p455w0rd.sct.containers.ContainerStoneWorkbench;
 
 /**
  * @author p455w0rd
  *
  */
-@SideOnly(Side.CLIENT)
-public class GuiSCT extends GuiContainer {
+@OnlyIn(Dist.CLIENT)
+public class GuiSCT extends ContainerScreen<ContainerStoneWorkbench> {
 
 	private static final ResourceLocation CRAFTING_TABLE_GUI_TEXTURES = new ResourceLocation("textures/gui/container/crafting_table.png");
 
-	public GuiSCT(ContainerStoneWorkbench container) {
-		super(container);
+	public GuiSCT(final ContainerStoneWorkbench container, final PlayerInventory inventory, final ITextComponent text) {
+		super(container, inventory, text);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		fontRenderer.drawString(I18n.format("tile.stone_crafting_table.name"), 28, 6, 4210752);
-		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
+	protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
+		font.drawString(I18n.format("block.sct.stone_crafting_table"), 28, 6, 4210752);
+		font.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURES);
-		int i = guiLeft;
-		int j = (height - ySize) / 2;
-		this.drawTexturedModalRect(i, j, 0, 0, xSize, ySize);
+	protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		minecraft.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURES);
+		final int i = guiLeft;
+		final int j = (height - ySize) / 2;
+		this.blit(i, j, 0, 0, xSize, ySize);
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		renderHoveredToolTip(mouseX, mouseY);
+	public void render(final int mouseX, final int mouseY, final float partialTicks) {
+		if (minecraft != null) {
+			renderBackground();
+			super.render(mouseX, mouseY, partialTicks);
+			renderHoveredToolTip(mouseX, mouseY);
+		}
 	}
 
 }

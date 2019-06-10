@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[26,)"
+credits="TheRealp455w0rd"
+authors="TheRealp455w0rd"
+[[mods]]
+    modId="sct"
+    version="0.0.1"
+    displayName="Stone Crafting Table" #mandatory
+    description='''
+Stone Crafting Table
+
+Adds a stone variation of the vanilla crafting table which keeps its inventory on harvest. Also adds the Stone Stick which can be used in place of sticks in recipes.
+'''
+
+[[dependencies.sct]]
+    modId="forge"
+    mandatory=true
+    versionRange="[26,)"
+    ordering="NONE"
+    side="BOTH"

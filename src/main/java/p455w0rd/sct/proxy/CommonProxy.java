@@ -1,20 +1,21 @@
 package p455w0rd.sct.proxy;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import p455w0rd.sct.StoneCraftingTable;
-import p455w0rd.sct.init.ModBlocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import p455w0rd.sct.init.ModGuiHandler;
-import p455w0rd.sct.init.ModItems;
+import p455w0rd.sct.init.ModGuiHandler.GUI;
 
 /**
  * @author p455w0rd
  *
  */
-public class CommonProxy {
+public class CommonProxy implements IProxy {
 
+	@Override
+	public boolean openGui(final GUI type, final PlayerEntity player, final BlockPos pos) {
+		return ModGuiHandler.openGuiServer(type, player, pos);
+	}
+	/*
 	public void preInit(FMLPreInitializationEvent e) {
 		ModBlocks.registerTiles();
 	}
@@ -26,5 +27,5 @@ public class CommonProxy {
 	public void postInit(FMLInitializationEvent e) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(StoneCraftingTable.instance, new ModGuiHandler());
 	}
-
+	*/
 }

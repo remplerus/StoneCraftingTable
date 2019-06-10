@@ -1,21 +1,25 @@
 package p455w0rd.sct.blocks.tiles;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
+import p455w0rd.sct.blocks.BlockSCT;
+import p455w0rd.sct.init.ModBlocks;
 import p455w0rd.sct.inventory.InventoryWorkbench;
-
-import java.util.HashSet;
-import java.util.Set;
+import p455w0rd.sct.util.SCTUtils;
 
 /**
  * @author p455w0rd
@@ -23,51 +27,57 @@ import java.util.Set;
  */
 public class TileSCT extends TileEntity implements IInventory {
 
+	public static final TileEntityType<TileSCT> TYPE = SCTUtils.registerTileEntityType(BlockSCT.getRegName().toString(), TileEntityType.Builder.func_223042_a(TileSCT::new, ModBlocks.STONE_WORKBENCH));
+
+	public TileSCT() {
+		super(TYPE);
+	}
+
 	private final String NBT_MATRIX_LIST = "MatrixInv";
 	private final String NBT_SLOT_ID = "Slot";
 	private final NonNullList<ItemStack> invList = NonNullList.withSize(9, ItemStack.EMPTY);
-	private Set<InventoryWorkbench> invs = new HashSet<>();
+	private final Set<InventoryWorkbench> invs = new HashSet<>();
 
-	public void onOpen(InventoryWorkbench inv) {
-		this.invs.add(inv);
+	public void onOpen(final InventoryWorkbench inv) {
+		invs.add(inv);
 	}
 
-	public void onClose(InventoryWorkbench inv) {
-		this.invs.remove(inv);
+	public void onClose(final InventoryWorkbench inv) {
+		invs.remove(inv);
 	}
 
 	public void updateInvs() {
-		for(InventoryWorkbench inv : this.invs) {
-				inv.changed();
+		for (final InventoryWorkbench inv : invs) {
+			inv.changed();
 		}
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		return writeToNBT(new NBTTagCompound());
+	public CompoundNBT getUpdateTag() {
+		return write(new CompoundNBT());
 	}
 
 	@Override
 	@Nullable
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 255, getUpdateTag());
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(getPos(), 255, getUpdateTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.getNbtCompound());
+	public void onDataPacket(final NetworkManager net, final SUpdateTileEntityPacket pkt) {
+		read(pkt.getNbtCompound());
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		if (nbt.hasKey(NBT_MATRIX_LIST)) {
-			NBTTagList nbttaglist = nbt.getTagList(NBT_MATRIX_LIST, 10);
-			for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-				NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-				int j = nbttagcompound.getByte(NBT_SLOT_ID) & 255;
+	public void read(final CompoundNBT nbt) {
+		super.read(nbt);
+		if (nbt.contains(NBT_MATRIX_LIST)) {
+			final ListNBT nbttaglist = nbt.getList(NBT_MATRIX_LIST, 10);
+			for (int i = 0; i < nbttaglist.size(); ++i) {
+				final CompoundNBT nbttagcompound = nbttaglist.getCompound(i);
+				final int j = nbttagcompound.getByte(NBT_SLOT_ID) & 255;
 				if (j >= 0 && j < getSizeInventory()) {
-					setInventorySlotContents(j, new ItemStack(nbttagcompound));
+					setInventorySlotContents(j, ItemStack.read(nbttagcompound));
 				}
 			}
 		}
@@ -75,31 +85,21 @@ public class TileSCT extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		NBTTagList nbttaglist = new NBTTagList();
+	public CompoundNBT write(final CompoundNBT nbt) {
+		super.write(nbt);
+		final ListNBT nbttaglist = new ListNBT();
 		for (int i = 0; i < getSizeInventory(); ++i) {
-			ItemStack itemstack = getStackInSlot(i);
+			final ItemStack itemstack = getStackInSlot(i);
 
 			if (!itemstack.isEmpty()) {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte(NBT_SLOT_ID, (byte) i);
-				itemstack.writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
+				final CompoundNBT nbttagcompound = new CompoundNBT();
+				nbttagcompound.putByte(NBT_SLOT_ID, (byte) i);
+				itemstack.write(nbttagcompound);
+				nbttaglist.add(nbttagcompound);
 			}
-			nbt.setTag(NBT_MATRIX_LIST, nbttaglist);
+			nbt.put(NBT_MATRIX_LIST, nbttaglist);
 		}
 		return nbt;
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class TileSCT extends TileEntity implements IInventory {
 
 	@Override
 	public boolean isEmpty() {
-		for (ItemStack stack : invList) {
+		for (final ItemStack stack : invList) {
 			if (!stack.isEmpty()) {
 				return false;
 			}
@@ -118,22 +118,22 @@ public class TileSCT extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getStackInSlot(final int index) {
 		return invList.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack decrStackSize(final int index, final int count) {
 		return ItemStackHelper.getAndSplit(invList, index, count);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeStackFromSlot(final int index) {
 		return ItemStackHelper.getAndRemove(invList, index);
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setInventorySlotContents(final int index, final ItemStack stack) {
 		invList.set(index, stack);
 	}
 
@@ -143,35 +143,21 @@ public class TileSCT extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(final PlayerEntity player) {
 		return getWorld().getTileEntity(getPos()) == this && player.getDistanceSq(getPos().getX() + .5, getPos().getY() + .5, getPos().getZ() + .5) <= 64;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(final PlayerEntity player) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(final PlayerEntity player) {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
+	public boolean isItemValidForSlot(final int index, final ItemStack stack) {
 		return true;
-	}
-
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
 	}
 
 	@Override
@@ -180,4 +166,5 @@ public class TileSCT extends TileEntity implements IInventory {
 			setInventorySlotContents(i, ItemStack.EMPTY);
 		}
 	}
+
 }

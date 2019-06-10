@@ -1,35 +1,27 @@
 package p455w0rd.sct.init;
 
-import java.io.File;
+import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
 public class ModConfig {
 
-	public static Configuration config;
+	public static final ForgeConfigSpec CONFIG_SPEC;
+	private static final ModConfig CONFIG;
 
-	public static void init() {
-		config = new Configuration(new File(ModGlobals.CONFIG_FILE));
-		MinecraftForge.EVENT_BUS.register(new ModConfig());
+	public static BooleanValue INFINITE_USE;
 
-		if (config.hasChanged()) {
-			config.save();
-		}
+	static {
+		Pair<ModConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ModConfig::new);
+		CONFIG_SPEC = specPair.getRight();
+		CONFIG = specPair.getLeft();
 	}
 
-	@SubscribeEvent
-	public void onConfigChange(ConfigChangedEvent.OnConfigChangedEvent e) {
-		if (e.getModID().equals(ModGlobals.MODID)) {
-			init();
-		}
+	ModConfig(ForgeConfigSpec.Builder builder) {
+		builder.push("general");
+		INFINITE_USE = builder.define("infiniteUse", true);
+		builder.pop();
 	}
 
-	public static class Options {
-
-		public static boolean INFINITE_USE = false;
-
-	}
 }
