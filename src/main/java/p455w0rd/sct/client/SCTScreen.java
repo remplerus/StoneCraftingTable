@@ -1,4 +1,4 @@
-package p455w0rd.sct.client.gui;
+package p455w0rd.sct.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
@@ -9,18 +9,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import p455w0rd.sct.containers.ContainerStoneWorkbench;
+import p455w0rd.sct.container.SCTContainer;
 
 /**
  * @author p455w0rd
  *
  */
 @OnlyIn(Dist.CLIENT)
-public class GuiSCT extends ContainerScreen<ContainerStoneWorkbench> {
+public class SCTScreen extends ContainerScreen<SCTContainer> {
 
 	private static final ResourceLocation CRAFTING_TABLE_GUI_TEXTURES = new ResourceLocation("textures/gui/container/crafting_table.png");
 
-	public GuiSCT(final ContainerStoneWorkbench container, final PlayerInventory inventory, final ITextComponent text) {
+	public SCTScreen(final SCTContainer container, final PlayerInventory inventory, final ITextComponent text) {
 		super(container, inventory, text);
 	}
 

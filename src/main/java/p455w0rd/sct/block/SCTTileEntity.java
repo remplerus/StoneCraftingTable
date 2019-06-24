@@ -1,4 +1,4 @@
-package p455w0rd.sct.blocks.tiles;
+package p455w0rd.sct.block;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,39 +16,39 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
-import p455w0rd.sct.init.ModBlocks;
-import p455w0rd.sct.inventory.InventoryWorkbench;
+import p455w0rd.sct.init.ModObjects;
+import p455w0rd.sct.inventory.SCTInventory;
 
 /**
  * @author p455w0rd
  *
  */
-public class TileSCT extends TileEntity implements IInventory {
+public class SCTTileEntity extends TileEntity implements IInventory {
 
-	public static final TileEntityType<TileSCT> TYPE = TileEntityType.Builder.create(TileSCT::new, ModBlocks.STONE_WORKBENCH).build(null);
+	public static final TileEntityType<SCTTileEntity> TYPE = TileEntityType.Builder.create(SCTTileEntity::new, ModObjects.STONE_WORKBENCH).build(null);
 	static {
-		TYPE.setRegistryName(ModBlocks.STONE_WORKBENCH.getRegistryName());
+		TYPE.setRegistryName(ModObjects.STONE_WORKBENCH.getRegistryName());
 	}
 
-	public TileSCT() {
+	public SCTTileEntity() {
 		super(TYPE);
 	}
 
 	private final String NBT_MATRIX_LIST = "MatrixInv";
 	private final String NBT_SLOT_ID = "Slot";
 	private final NonNullList<ItemStack> invList = NonNullList.withSize(9, ItemStack.EMPTY);
-	private final Set<InventoryWorkbench> invs = new HashSet<>();
+	private final Set<SCTInventory> invs = new HashSet<>();
 
-	public void onOpen(final InventoryWorkbench inv) {
+	public void onOpen(final SCTInventory inv) {
 		invs.add(inv);
 	}
 
-	public void onClose(final InventoryWorkbench inv) {
+	public void onClose(final SCTInventory inv) {
 		invs.remove(inv);
 	}
 
 	public void updateInvs() {
-		for (final InventoryWorkbench inv : invs) {
+		for (final SCTInventory inv : invs) {
 			inv.changed();
 		}
 	}

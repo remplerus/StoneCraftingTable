@@ -1,4 +1,4 @@
-package p455w0rd.sct.blocks;
+package p455w0rd.sct.block;
 
 import javax.annotation.Nullable;
 
@@ -18,20 +18,19 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
-import p455w0rd.sct.blocks.tiles.TileSCT;
-import p455w0rd.sct.containers.ContainerStoneWorkbench;
-import p455w0rd.sct.init.ModGlobals;
+import p455w0rd.sct.container.SCTContainer;
+import p455w0rd.sct.init.Constants;
 
 /**
  * @author p455w0rd
  *
  */
 @SuppressWarnings("deprecation")
-public class BlockSCT extends Block {
+public class SCTBlock extends Block {
 
-	protected static final ResourceLocation REG_NAME = new ResourceLocation(ModGlobals.MODID, "stone_crafting_table");
+	protected static final ResourceLocation REG_NAME = new ResourceLocation(Constants.MODID, "stone_crafting_table");
 
-	public BlockSCT() {
+	public SCTBlock() {
 		super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
 		setRegistryName(REG_NAME);
 	}
@@ -44,8 +43,8 @@ public class BlockSCT extends Block {
 	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rtr) {
 		if (!world.isRemote) {
 			final TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof TileSCT) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerStoneWorkbench.Provider((TileSCT) tile), tile.getPos());
+			if (tile instanceof SCTTileEntity) {
+				NetworkHooks.openGui((ServerPlayerEntity) player, new SCTContainer.Provider((SCTTileEntity) tile), tile.getPos());
 			}
 		}
 		return true;
@@ -62,7 +61,7 @@ public class BlockSCT extends Block {
 	private ItemStack getItemBlockWithNBT(final TileEntity te) {
 		final ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
 		final CompoundNBT nbttagcompound = new CompoundNBT();
-		if (te != null && te instanceof TileSCT && !((TileSCT) te).isEmpty()) {
+		if (te != null && te instanceof SCTTileEntity && !((SCTTileEntity) te).isEmpty()) {
 			te.write(nbttagcompound);
 			stack.setTagInfo("BlockEntityTag", nbttagcompound);
 		}
@@ -76,7 +75,7 @@ public class BlockSCT extends Block {
 
 	@Override
 	public TileEntity createTileEntity(final BlockState state, final IBlockReader world) {
-		return new TileSCT();
+		return new SCTTileEntity();
 	}
 
 }

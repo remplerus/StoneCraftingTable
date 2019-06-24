@@ -12,11 +12,11 @@ public class CommonProxy {
 	public void init() {
 	}
 
-	public PlayerEntity getPlayer() {
+	public PlayerEntity getClientPlayer() {
 		return null;
 	}
 
-	public World getWorld() {
+	public World getClientWorld() {
 		return null;
 	}
 }

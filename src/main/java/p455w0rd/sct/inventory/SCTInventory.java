@@ -5,18 +5,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import p455w0rd.sct.blocks.tiles.TileSCT;
+import p455w0rd.sct.block.SCTTileEntity;
 
 /**
  * @author Lothrazar via https://github.com/PrinceOfAmber/Cyclic/blob/develop/src/main/java/com/lothrazar/cyclicmagic/block/workbench/InventoryWorkbench.java
  *
  */
-public class InventoryWorkbench extends CraftingInventory {
+public class SCTInventory extends CraftingInventory {
 
-	private final TileSCT tile;
+	private final SCTTileEntity tile;
 	private final Container container;
 
-	public InventoryWorkbench(final Container eventHandlerIn, final TileSCT tileEntity) {
+	public SCTInventory(final Container eventHandlerIn, final SCTTileEntity tileEntity) {
 		super(eventHandlerIn, 3, 3);
 		tile = tileEntity;
 		container = eventHandlerIn;

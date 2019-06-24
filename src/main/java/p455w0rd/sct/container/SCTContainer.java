@@ -1,4 +1,4 @@
-package p455w0rd.sct.containers;
+package p455w0rd.sct.container;
 
 import java.util.Optional;
 
@@ -14,41 +14,41 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import p455w0rd.sct.StoneCraftingTable;
-import p455w0rd.sct.blocks.tiles.TileSCT;
-import p455w0rd.sct.init.ModBlocks;
-import p455w0rd.sct.inventory.InventoryWorkbench;
+import p455w0rd.sct.block.SCTTileEntity;
+import p455w0rd.sct.init.ModObjects;
+import p455w0rd.sct.inventory.SCTInventory;
 
 /**
  * @author p455w0rd
  *
  */
-public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbench> {
+public class SCTContainer extends RecipeBookContainer<SCTInventory> {
 
 	@SuppressWarnings("unchecked")
-	public static final ContainerType<ContainerStoneWorkbench> TYPE = (ContainerType<ContainerStoneWorkbench>) IForgeContainerType.create((id, inv, data) -> {
+	public static final ContainerType<SCTContainer> TYPE = (ContainerType<SCTContainer>) IForgeContainerType.create((id, inv, data) -> {
 		final BlockPos pos = data.readBlockPos();
-		final World world = StoneCraftingTable.getProxy().getWorld();
+		final World world = StoneCraftingTable.getProxy().getClientWorld();
 		final TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileSCT) {
-			return new ContainerStoneWorkbench((TileSCT) tile, StoneCraftingTable.getProxy().getPlayer(), id);
+		if (tile instanceof SCTTileEntity) {
+			return new SCTContainer((SCTTileEntity) tile, StoneCraftingTable.getProxy().getClientPlayer(), id);
 		}
 		return null;
-	}).setRegistryName(ModBlocks.STONE_WORKBENCH.getRegistryName());
+	}).setRegistryName(ModObjects.STONE_WORKBENCH.getRegistryName());
 
-	private final TileSCT tile;
-	private final InventoryWorkbench craftMatrix;
+	private final SCTTileEntity tile;
+	private final SCTInventory craftMatrix;
 	private final CraftResultInventory craftResult;
 	private final World world;
 	private final PlayerEntity player;
 	private final IWorldPosCallable pos;
 
-	public ContainerStoneWorkbench(final TileSCT tile, final PlayerEntity player, final int id) {
+	public SCTContainer(final SCTTileEntity tile, final PlayerEntity player, final int id) {
 		super(ContainerType.CRAFTING, id);
 		this.tile = tile;
 		world = player.world;
@@ -62,7 +62,7 @@ public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbe
 				tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
 			}
 		};
-		craftMatrix = new InventoryWorkbench(this, tile);
+		craftMatrix = new SCTInventory(this, tile);
 		craftMatrix.openInventory(player);
 		addSlot(new CraftingResultSlot(player, craftMatrix, craftResult, 0, 124, 35));
 		for (int i = 0; i < 3; ++i) {
@@ -114,7 +114,7 @@ public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbe
 	}
 
 	@Override
-	public boolean matches(final IRecipe<? super InventoryWorkbench> recipe) {
+	public boolean matches(final IRecipe<? super SCTInventory> recipe) {
 		return recipe.matches(craftMatrix, player.world);
 	}
 
@@ -195,20 +195,20 @@ public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbe
 
 	public static class Provider implements INamedContainerProvider {
 
-		TileSCT tile;
+		SCTTileEntity tile;
 
-		public Provider(final TileSCT tile) {
+		public Provider(final SCTTileEntity tile) {
 			this.tile = tile;
 		}
 
 		@Override
 		public Container createMenu(final int windowId, final PlayerInventory inv, final PlayerEntity player) {
-			return new ContainerStoneWorkbench(tile, player, windowId);
+			return new SCTContainer(tile, player, windowId);
 		}
 
 		@Override
 		public ITextComponent getDisplayName() {
-			return new StringTextComponent("Stone Crafting Table");
+			return new TranslationTextComponent("block.sct.stone_crafting_table");
 		}
 
 	}

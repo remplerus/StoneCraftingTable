@@ -4,11 +4,11 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import p455w0rd.sct.init.ModGlobals;
+import p455w0rd.sct.init.Constants;
 import p455w0rd.sct.proxy.ClientProxy;
 import p455w0rd.sct.proxy.CommonProxy;
 
-@Mod(ModGlobals.MODID)
+@Mod(Constants.MODID)
 public class StoneCraftingTable {
 
 	private static StoneCraftingTable instance;
