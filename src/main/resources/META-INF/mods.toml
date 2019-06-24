@@ -4,7 +4,7 @@ credits="TheRealp455w0rd"
 authors="TheRealp455w0rd"
 [[mods]]
     modId="sct"
-    version="0.0.1"
+    version="1.0.3"
     displayName="Stone Crafting Table" #mandatory
     description='''
 Stone Crafting Table

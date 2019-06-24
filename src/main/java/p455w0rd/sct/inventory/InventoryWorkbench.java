@@ -32,9 +32,6 @@ public class InventoryWorkbench extends CraftingInventory {
 		return tile.getStackInSlot(index);
 	}
 
-	/**
-	 * just like vanilla
-	 */
 	@Override
 	public ItemStack decrStackSize(final int index, final int count) {
 		final ItemStack stack = tile.decrStackSize(index, count);
@@ -47,7 +44,6 @@ public class InventoryWorkbench extends CraftingInventory {
 	@Override
 	public void setInventorySlotContents(final int index, final ItemStack stack) {
 		tile.setInventorySlotContents(index, stack);
-		//container.onCraftMatrixChanged(this);
 		tile.updateInvs();
 	}
 

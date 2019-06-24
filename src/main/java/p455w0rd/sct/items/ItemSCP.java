@@ -18,16 +18,13 @@ public class ItemSCP extends Item {
 	private static final Properties PROPS = new Properties().group(ModItemGroup.getInstance()).maxStackSize(64);
 
 	public ItemSCP() {
-		//setCreativeTab(CreativeTabs.DECORATIONS);
-		//setUnlocalizedName(NAME);
 		super(PROPS);
 		setRegistryName(ModGlobals.MODID + ":" + NAME);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void registerModel(ItemModelMesher mesher) {
+	public void registerModel(final ItemModelMesher mesher) {
 		mesher.register(this, new ModelResourceLocation(getRegistryName(), "inventory"));
-		//ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 
 }

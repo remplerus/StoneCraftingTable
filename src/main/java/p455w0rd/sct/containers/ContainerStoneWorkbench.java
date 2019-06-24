@@ -3,19 +3,25 @@ package p455w0rd.sct.containers;
 import java.util.Optional;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.*;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.play.server.SSetSlotPacket;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.extensions.IForgeContainerType;
+import p455w0rd.sct.StoneCraftingTable;
 import p455w0rd.sct.blocks.tiles.TileSCT;
+import p455w0rd.sct.init.ModBlocks;
 import p455w0rd.sct.inventory.InventoryWorkbench;
 
 /**
@@ -24,17 +30,30 @@ import p455w0rd.sct.inventory.InventoryWorkbench;
  */
 public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbench> {
 
+	@SuppressWarnings("unchecked")
+	public static final ContainerType<ContainerStoneWorkbench> TYPE = (ContainerType<ContainerStoneWorkbench>) IForgeContainerType.create((id, inv, data) -> {
+		final BlockPos pos = data.readBlockPos();
+		final World world = StoneCraftingTable.getProxy().getWorld();
+		final TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileSCT) {
+			return new ContainerStoneWorkbench((TileSCT) tile, StoneCraftingTable.getProxy().getPlayer(), id);
+		}
+		return null;
+	}).setRegistryName(ModBlocks.STONE_WORKBENCH.getRegistryName());
+
 	private final TileSCT tile;
 	private final InventoryWorkbench craftMatrix;
 	private final CraftResultInventory craftResult;
 	private final World world;
 	private final PlayerEntity player;
+	private final IWorldPosCallable pos;
 
 	public ContainerStoneWorkbench(final TileSCT tile, final PlayerEntity player, final int id) {
-		super(ContainerType.field_221518_l, id);
+		super(ContainerType.CRAFTING, id);
 		this.tile = tile;
 		world = player.world;
 		this.player = player;
+		pos = IWorldPosCallable.of(world, player.getPosition());
 		craftResult = new CraftResultInventory() {
 			@Override
 			public void markDirty() {
@@ -53,12 +72,12 @@ public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbe
 		}
 		for (int k = 0; k < 3; ++k) {
 			for (int i1 = 0; i1 < 9; ++i1) {
-				addSlot(new Slot(player.field_71071_by, i1 + k * 9 + 9, 8 + i1 * 18, 84 + k * 18));
+				addSlot(new Slot(player.inventory, i1 + k * 9 + 9, 8 + i1 * 18, 84 + k * 18));
 			}
 		}
 
 		for (int l = 0; l < 9; ++l) {
-			addSlot(new Slot(player.field_71071_by, l, 8 + l * 18, 142));
+			addSlot(new Slot(player.inventory, l, 8 + l * 18, 142));
 		}
 		onCraftMatrixChanged(craftMatrix);
 		tile.updateInvs();
@@ -66,18 +85,17 @@ public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbe
 
 	@Override
 	public void onCraftMatrixChanged(final IInventory inventory) {
-		IWorldPosCallable.of(world, player.getPosition()).consume((world, pos) -> {
+		pos.consume((world, pos) -> {
 			if (!world.isRemote) {
 				final ServerPlayerEntity playerMp = (ServerPlayerEntity) player;
 				ItemStack stack = ItemStack.EMPTY;
-				final Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().func_215371_a(IRecipeType.field_222149_a, craftMatrix, world);
+				final Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftMatrix, world);
 				if (optional.isPresent()) {
 					final ICraftingRecipe icraftingrecipe = optional.get();
 					if (craftResult.canUseRecipe(world, playerMp, icraftingrecipe)) {
 						stack = icraftingrecipe.getCraftingResult(craftMatrix);
 					}
 				}
-
 				craftResult.setInventorySlotContents(0, stack);
 				playerMp.connection.sendPacket(new SSetSlotPacket(windowId, 0, stack));
 			}
@@ -173,6 +191,26 @@ public class ContainerStoneWorkbench extends RecipeBookContainer<InventoryWorkbe
 	@Override
 	public boolean canMergeSlot(final ItemStack stack, final Slot slotIn) {
 		return slotIn.inventory != craftResult && super.canMergeSlot(stack, slotIn);
+	}
+
+	public static class Provider implements INamedContainerProvider {
+
+		TileSCT tile;
+
+		public Provider(final TileSCT tile) {
+			this.tile = tile;
+		}
+
+		@Override
+		public Container createMenu(final int windowId, final PlayerInventory inv, final PlayerEntity player) {
+			return new ContainerStoneWorkbench(tile, player, windowId);
+		}
+
+		@Override
+		public ITextComponent getDisplayName() {
+			return new StringTextComponent("Stone Crafting Table");
+		}
+
 	}
 
 }

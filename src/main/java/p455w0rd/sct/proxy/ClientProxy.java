@@ -1,11 +1,11 @@
 package p455w0rd.sct.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import p455w0rd.sct.init.ModGuiHandler;
-import p455w0rd.sct.init.ModGuiHandler.GUI;
+import p455w0rd.sct.client.gui.GuiSCT;
+import p455w0rd.sct.containers.ContainerStoneWorkbench;
 
 /**
  * @author p455w0rd
@@ -14,19 +14,18 @@ import p455w0rd.sct.init.ModGuiHandler.GUI;
 public class ClientProxy extends CommonProxy {
 
 	@Override
-	public boolean openGui(final GUI type, final PlayerEntity player, final BlockPos pos) {
-		final boolean ret = super.openGui(type, player, pos);
-		return ModGuiHandler.openGuiClient(type, player, pos) && ret;
+	public void init() {
+		ScreenManager.registerFactory(ContainerStoneWorkbench.TYPE, GuiSCT::new);
 	}
 
 	@Override
 	public PlayerEntity getPlayer() {
-		return Minecraft.getInstance().field_71439_g;
+		return Minecraft.getInstance().player;
 	}
 
 	@Override
 	public World getWorld() {
-		return Minecraft.getInstance().field_71441_e;
+		return Minecraft.getInstance().world;
 	}
 
 }

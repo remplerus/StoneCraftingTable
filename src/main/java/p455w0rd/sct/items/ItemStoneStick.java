@@ -23,9 +23,8 @@ public class ItemStoneStick extends Item {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void registerModel(ItemModelMesher mesher) {
+	public void registerModel(final ItemModelMesher mesher) {
 		mesher.register(this, new ModelResourceLocation(getRegistryName(), "inventory"));
-		//ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 
 }

@@ -16,10 +16,8 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
-import p455w0rd.sct.blocks.BlockSCT;
 import p455w0rd.sct.init.ModBlocks;
 import p455w0rd.sct.inventory.InventoryWorkbench;
-import p455w0rd.sct.util.SCTUtils;
 
 /**
  * @author p455w0rd
@@ -27,7 +25,10 @@ import p455w0rd.sct.util.SCTUtils;
  */
 public class TileSCT extends TileEntity implements IInventory {
 
-	public static final TileEntityType<TileSCT> TYPE = SCTUtils.registerTileEntityType(BlockSCT.getRegName().toString(), TileEntityType.Builder.func_223042_a(TileSCT::new, ModBlocks.STONE_WORKBENCH));
+	public static final TileEntityType<TileSCT> TYPE = TileEntityType.Builder.create(TileSCT::new, ModBlocks.STONE_WORKBENCH).build(null);
+	static {
+		TYPE.setRegistryName(ModBlocks.STONE_WORKBENCH.getRegistryName());
+	}
 
 	public TileSCT() {
 		super(TYPE);

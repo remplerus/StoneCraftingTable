@@ -3,6 +3,7 @@ package p455w0rd.sct.items;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import p455w0rd.sct.init.ModBlocks;
@@ -23,9 +24,12 @@ public class ItemBlockSCT extends BlockItem {
 
 	@OnlyIn(Dist.CLIENT)
 	public void registerModel(final ItemModelMesher mesher) {
-		//ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "inventory"));
 		mesher.register(this, new ModelResourceLocation(getRegistryName(), "inventory"));
-		//ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+	}
+
+	@Override
+	public int getBurnTime(final ItemStack itemStack) {
+		return 10 * 20;
 	}
 
 }

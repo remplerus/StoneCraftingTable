@@ -1,31 +1,22 @@
 package p455w0rd.sct.proxy;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import p455w0rd.sct.init.ModGuiHandler;
-import p455w0rd.sct.init.ModGuiHandler.GUI;
+import net.minecraft.world.World;
 
 /**
  * @author p455w0rd
  *
  */
-public class CommonProxy implements IProxy {
+public class CommonProxy {
 
-	@Override
-	public boolean openGui(final GUI type, final PlayerEntity player, final BlockPos pos) {
-		return ModGuiHandler.openGuiServer(type, player, pos);
-	}
-	/*
-	public void preInit(FMLPreInitializationEvent e) {
-		ModBlocks.registerTiles();
+	public void init() {
 	}
 
-	public void init(FMLInitializationEvent e) {
-		OreDictionary.registerOre("stickWood", ModItems.STONE_STICK);
+	public PlayerEntity getPlayer() {
+		return null;
 	}
 
-	public void postInit(FMLInitializationEvent e) {
-		NetworkRegistry.INSTANCE.registerGuiHandler(StoneCraftingTable.instance, new ModGuiHandler());
+	public World getWorld() {
+		return null;
 	}
-	*/
 }
