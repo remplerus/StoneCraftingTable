@@ -103,7 +103,7 @@ public class SCTContainer extends RecipeBookContainer<SCTInventory> {
 	}
 
 	@Override
-	public void func_201771_a(final RecipeItemHelper rih) {
+	public void fillStackedContents(final RecipeItemHelper rih) {
 		craftMatrix.fillStackedContents(rih);
 	}
 

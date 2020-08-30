@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -40,14 +41,14 @@ public class SCTBlock extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rtr) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rtr) {
 		if (!world.isRemote) {
 			final TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof SCTTileEntity) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, new SCTContainer.Provider((SCTTileEntity) tile), tile.getPos());
 			}
 		}
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
