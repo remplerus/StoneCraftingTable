@@ -1,17 +1,17 @@
-package p455w0rd.sct.integration;
+package com.rempler.sct.integration;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.registration.*;
 import net.minecraft.util.ResourceLocation;
-import p455w0rd.sct.client.SCTScreen;
-import p455w0rd.sct.container.SCTContainer;
-import p455w0rd.sct.init.Constants;
-import p455w0rd.sct.init.ModObjects;
+import com.rempler.sct.table.SCTScreen;
+import com.rempler.sct.table.SCTContainer;
+import com.rempler.sct.init.Constants;
+import com.rempler.sct.init.ModObjects;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 @JeiPlugin

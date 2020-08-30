@@ -1,12 +1,12 @@
-package p455w0rd.sct;
+package com.rempler.sct;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import p455w0rd.sct.init.Constants;
-import p455w0rd.sct.proxy.ClientProxy;
-import p455w0rd.sct.proxy.CommonProxy;
+import com.rempler.sct.init.Constants;
+import com.rempler.sct.proxy.ClientProxy;
+import com.rempler.sct.proxy.CommonProxy;
 
 @Mod(Constants.MODID)
 public class StoneCraftingTable {

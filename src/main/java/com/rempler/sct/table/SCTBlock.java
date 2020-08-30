@@ -1,4 +1,4 @@
-package p455w0rd.sct.block;
+package com.rempler.sct.table;
 
 import javax.annotation.Nullable;
 
@@ -19,11 +19,10 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
-import p455w0rd.sct.container.SCTContainer;
-import p455w0rd.sct.init.Constants;
+import com.rempler.sct.init.Constants;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 @SuppressWarnings("deprecation")

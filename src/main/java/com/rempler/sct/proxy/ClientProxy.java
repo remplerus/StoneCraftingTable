@@ -1,14 +1,14 @@
-package p455w0rd.sct.proxy;
+package com.rempler.sct.proxy;
 
+import com.rempler.sct.table.SCTScreen;
+import com.rempler.sct.table.SCTContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import p455w0rd.sct.client.SCTScreen;
-import p455w0rd.sct.container.SCTContainer;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 public class ClientProxy extends CommonProxy {

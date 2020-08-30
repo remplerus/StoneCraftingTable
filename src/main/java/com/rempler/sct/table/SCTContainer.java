@@ -1,8 +1,10 @@
-package p455w0rd.sct.container;
+package com.rempler.sct.table;
 
 import java.util.Optional;
 
+import com.rempler.sct.StoneCraftingTable;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.screen.inventory.CraftingScreen;
 import net.minecraft.entity.player.*;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.IInventory;
@@ -19,13 +21,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import p455w0rd.sct.StoneCraftingTable;
-import p455w0rd.sct.block.SCTTileEntity;
-import p455w0rd.sct.init.ModObjects;
-import p455w0rd.sct.inventory.SCTInventory;
+import com.rempler.sct.init.ModObjects;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 public class SCTContainer extends RecipeBookContainer<SCTInventory> {

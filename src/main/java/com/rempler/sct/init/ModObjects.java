@@ -1,13 +1,13 @@
-package p455w0rd.sct.init;
+package com.rempler.sct.init;
 
+import com.rempler.sct.table.SCTBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import p455w0rd.sct.api.BaseBlockItem;
-import p455w0rd.sct.api.BaseItem;
-import p455w0rd.sct.block.SCTBlock;
+import com.rempler.sct.api.BaseBlockItem;
+import com.rempler.sct.api.BaseItem;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 public class ModObjects {

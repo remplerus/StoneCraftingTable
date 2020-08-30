@@ -1,4 +1,4 @@
-package p455w0rd.sct.client;
+package com.rempler.sct.table;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
@@ -9,10 +9,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import p455w0rd.sct.container.SCTContainer;
+import com.rempler.sct.table.SCTContainer;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 @OnlyIn(Dist.CLIENT)

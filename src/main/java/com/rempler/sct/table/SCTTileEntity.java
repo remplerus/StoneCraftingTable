@@ -1,4 +1,4 @@
-package p455w0rd.sct.block;
+package com.rempler.sct.table;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,11 +16,10 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
-import p455w0rd.sct.init.ModObjects;
-import p455w0rd.sct.inventory.SCTInventory;
+import com.rempler.sct.init.ModObjects;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 public class SCTTileEntity extends TileEntity implements IInventory {

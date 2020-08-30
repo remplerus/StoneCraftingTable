@@ -1,7 +1,9 @@
-package p455w0rd.sct.init;
+package com.rempler.sct.init;
 
 import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.MOD;
 
+import com.rempler.sct.table.SCTTileEntity;
+import com.rempler.sct.table.SCTContainer;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -9,11 +11,9 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import p455w0rd.sct.block.SCTTileEntity;
-import p455w0rd.sct.container.SCTContainer;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 @EventBusSubscriber(bus = MOD, modid = Constants.MODID)

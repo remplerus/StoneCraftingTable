@@ -1,11 +1,11 @@
-package p455w0rd.sct.api;
+package com.rempler.sct.api;
 
+import com.rempler.sct.init.Constants;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import p455w0rd.sct.init.Constants;
 
 /**
- * @author p455w0rd
+ * @author p455w0rd, updated by Rempler
  *
  */
 public class BaseItem extends Item implements IItemStackProvider {

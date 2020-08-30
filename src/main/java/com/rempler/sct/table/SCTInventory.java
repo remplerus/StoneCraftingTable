@@ -1,15 +1,14 @@
-package p455w0rd.sct.inventory;
+package com.rempler.sct.table;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import p455w0rd.sct.block.SCTTileEntity;
 
 /**
  * @author Lothrazar via https://github.com/PrinceOfAmber/Cyclic/blob/develop/src/main/java/com/lothrazar/cyclicmagic/block/workbench/InventoryWorkbench.java
- *
+ * updated by Rempler
  */
 public class SCTInventory extends CraftingInventory {
 
